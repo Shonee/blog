@@ -1,0 +1,24 @@
+{
+  "name": "github_doc",
+  "version": "1.0.0",
+  "description": "GitHub docs with VitePress and GitHub Pages",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shonee/github_doc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shonee/github_doc/issues"
+  },
+  "homepage": "https://github.com/Shonee/github_doc#readme",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
