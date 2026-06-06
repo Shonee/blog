@@ -1,10 +1,17 @@
-# GitHub 文档
+# Shonee Blog
 
-这是一个基于 **VitePress** 构建的 GitHub 相关文档站点。
+这是一个基于 **VitePress** 的个人博客，覆盖 GitHub、Cloudflare、NAS、AI 等技术主题。
 
-- 文档来源目录：`docs/`
-- 构建工具：VitePress
-- 发布方式：GitHub Actions + GitHub Pages
+## 快速入口
 
-后续在 `docs/` 下新增或更新 Markdown 文档，推送到默认分支后会自动触发页面重新构建与部署。
+- [文章列表](/posts/)
+- [分类目录](/categories/)
+- [标签目录](/tags/)
 
+## 内容组织
+
+- 文章目录：`docs/posts/`
+- 主题目录：`github`、`cloudflare`、`nas`、`ai`
+- 每篇文章建议使用 Frontmatter 维护 `title`、`date`、`category`、`tags`
+
+新增或更新 `docs/` 内文档后，推送到仓库会自动触发 VitePress 构建与部署。
