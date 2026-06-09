@@ -1,6 +1,6 @@
 # 镜像拉了两小时？教你在 Docker 中配置国内镜像
 
-![封面](cover.png)
+![封面](images/nas-docker-mirror-cover.png)
 
 Docker 拉镜像拉不动，十有八九是镜像源的问题。
 
@@ -15,7 +15,7 @@ Docker 中的这些镜像默认存在 Docker Hub（`hub.docker.com`），服务�
 
 无论是 Linux、Windows 或者 NAS 上的 Docker，都得先配好镜像源，如 NAS 装 Jellyfin、Alist、Home Assistant 等产品，都是拉 Docker 镜像实现部署。
 
-![Docker 镜像拉取流程](images/docker-mirror-flow.png)
+![Docker 镜像拉取流程](images/nas-docker-mirror-docker-mirror-flow.png)
 
 ### 目前可用的镜像源
 
@@ -121,11 +121,11 @@ daemon.json 配置 > Docker Compose = docker pull
 
 1. 登录绿联 NAS 管理页面
 2. 打开「Docker」应用（UGOS Pro 在应用中心找）
-![绿联 NAS Docker 应用入口](image.png)
+![绿联 NAS Docker 应用入口](images/nas-docker-mirror-image.png)
 3. 进入「设置」，找到「镜像加速」或「Registry Mirror」
-![绿联 Docker 镜像加速设置页面](image-1.png)
+![绿联 Docker 镜像加速设置页面](images/nas-docker-mirror-image-1.png)
 4. 填入加速地址，一行一个：
-![填入镜像加速地址](image-2.png)
+![填入镜像加速地址](images/nas-docker-mirror-image-2.png)
 ```
 https://docker.m.daocloud.io
 https://docker.1panel.live
