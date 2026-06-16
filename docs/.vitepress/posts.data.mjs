@@ -38,7 +38,7 @@ export default createContentLoader('posts/**/*.md', {
           inferCategoryFromUrl(post.url).toLowerCase()
 
         return {
-          title: post.frontmatter.title || post.title,
+          title: post.frontmatter.title || post.title || '',
           url: post.url,
           excerpt: post.excerpt,
           date: post.frontmatter.date || '',
