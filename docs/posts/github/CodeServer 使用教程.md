@@ -1,3 +1,11 @@
+---
+title: CodeServer 使用教程
+date: 2026-06-20
+category: github
+tags:
+  - github
+---
+
 ## Code Server — 浏览器里的 VS Code，随时随地写代码
 
 ### 一、Code Server 是什么
