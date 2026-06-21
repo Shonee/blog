@@ -1,0 +1,59 @@
+# ClouDNS 永久免费的域名！可以托管到 cf 平台！
+
+### ClouDNS
+
+ClouDNS 身为欧洲名列前茅的全球托管 DNS 服务供应商，其服务范畴涵盖了 GeoDNS、Anycast DNS 以及拥有 DDoS 防护的 DNS 等领域。该公司大力推行业界领先的云服务架构，力求实现顶级的 DNS 速度和 DNS 冗余性能。ClouDNS 平台针对应用程序以及 DNS 基础设施展开了严谨的监测、把控与优化工作，有力地确保了流量传输更加迅速、稳定且可靠。
+
+这次为大家介绍如何免费获取一个属于他的永久域名。虽然只是一个二级域名，不过好在具有永久的特性，并且能够托管到 Cloudflare 平台，从而免费享受 CF 的 CDN 服务。
+
+### 注册
+
+我们需借助邮箱在 ClouDNS 平台注册一个账户，可通过访问下方地址来完成注册：
+
+```Plain Text
+<https://www.cloudns.net/>
+```
+
+注册完成后，会出现如下弹窗，同时需在自己的邮箱中查看 ClouDNS 发送的激活邮件。
+
+通过收到的邮件中的激活地址进行激活操作后，页面会跳转到 ClouDNS 平台，并呈现出如下情形。
+
+依照指引点击`Yes`，直至出现下方界面。
+
+### 创建免费域名
+
+在上述图片中，选择最后一项`Free zone`，此时会让你创建一个自定义的二级域名。
+
+在此操作中，我选择的是`.``cloudns.cn`域名，并对前缀进行了自定义，比如：`ovo-a.cloudns.ch`。那么，在`Domain name`处填写`ovo-a`，而后点击`CREATE`以完成创建。
+
+倘若出现上述提示，则需借助科学上网方式再次点击创建。最后应该呈现出如下的界面。
+
+### 域名解析
+
+点击右侧的`+ Add new record`选项，来添加新的记录值：
+
+此处的操作与其他平台相类似，能够解析 IPv4、IPv6 等记录值以及其他常见的类型。ClouDNS 的免费 DNS 托管服务具备一定的功能和限制，例如：
+
+1、4 个单播 DNS 服务器；
+
+2、1 个 DNS 区域；
+
+3、50 个 DNS 记录；
+
+4、每月 50 万次 DNS 查询；
+
+5、1 个邮件转发；
+
+6、提供动态 DNS；
+
+7、24/7 实时聊天支持。
+
+
+
+### 参考文档
+
+[零成本申请一个永久免费的域名！还可以托管到Cloudflare平台！](https://mp.weixin.qq.com/s?chksm=c0c65c1ff7b1d509877940bb0e9e27fc4c8212af9523518741fe9b4f72fa5628e3d67349d2fc&exptype=unsubscribed_card_recommend_article_u2i_mainprocess_coarse_sort_tlfeeds&ranksessionid=1721709652_1&mid=2247487073&sn=d8ffb2da655fe2b2cff67efd0e70a014&idx=1&__biz=MzkwODYyNTY4MQ%3D%3D&scene=169&subscene=200&sessionid=1721709652&flutter_pos=7&clicktime=1721709668&enterid=1721709668&finder_biz_enter_id=5&ascene=56&fasttmpl_type=0&fasttmpl_fullversion=7305661-zh_CN-zip&fasttmpl_flag=0&realreporttime=1721709668683&devicetype=android-31&version=28003254&nettype=cmnet&abtest_cookie=AAACAA%3D%3D&lang=zh_CN&session_us=gh_72f4e30f4553&countrycode=CN&exportkey=n_ChQIAhIQFYxrxZ66skloTH%2BzWVeAOxLpAQIE97dBBAEAAAAAAGG0NglLGVsAAAAOpnltbLcz9gKNyK89dVj0j3sUJE9D5OWsZS%2FCrbudFGQMPUdxIzdVvCef4aZnFC0%2Bs4f1mOMvOyldSV5aG6jt1Na33uiDv04V3QnG9njRfFRUOIltHlEicaHeNcrP%2FgibyeCop5PBussyy2%2FF9gGWnQ2eOxs1%2Bg67l2%2Bn76uwtiMMTxHUNMLOVxueyS0R9%2B9ja%2Bv%2Fyk%2BmtjbnZwn2k98uRziQSozBw5g1hcbkEJfPPX6jUJNU1SjPNiZGt6%2FUVze2rkBZARnZREA%2B%2FdLBjioBSibZ&pass_ticket=d6rZhrVbc6o1%2FqrmF7Bupfb8Wo%2FjfgeWp2Qs8K6tAkodCBLcptoag1kpMeQH%2FJpO&wx_header=3) 
+
+https://ginvh09pnwq.feishu.cn/wiki/SwZKwJDcTisSxcksfERcQjj1ncg
+
+
