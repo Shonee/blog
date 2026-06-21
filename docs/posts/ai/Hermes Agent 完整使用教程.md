@@ -30,7 +30,163 @@ Hermes Agent 是由知名开源 AI 研究机构 **Nous Research** 开发的一�
 
 ## 二、核心架构与功能详解
 
-### 2.1 工具调用流程
+### 2.1 项目目录和架构解析
+
+Hermes Agent 的源码采用高度模块化的组织方式，各功能域清晰分离。以下是 GitHub 仓库的顶层目录结构及各模块职责说明：
+
+```
+hermes-agent/
+├── agent/                  # 核心 Agent 引擎
+│   ├── run_agent.py        # Agent 主生命周期入口
+│   ├── prompt_builder.py   # 系统提示词组装
+│   ├── memory_manager.py   # 双通道记忆管理
+│   ├── context_compressor.py # 可插拔的上下文压缩引擎
+│   └── skill_engine.py     # Skill 自动检测与生成
+├── hermes_cli/             # 命令行界面（CLI）
+│   ├── __init__.py
+│   ├── chat.py             # 交互式对话实现
+│   ├── setup.py            # 配置向导
+│   └── commands/           # 各 CLI 子命令实现
+├── gateway/                # 消息网关（多平台适配）
+│   ├── run.py              # 网关生命周期管理（GatewayRunner）
+│   ├── delivery.py         # 消息路由与投递
+│   ├── session.py          # 会话状态管理
+│   ├── config/             # 平台配置与枚举
+│   └── platforms/          # 各平台适配器
+│       ├── base.py         # 平台适配器抽象基类（BasePlatformAdapter）
+│       ├── feishu.py       # 飞书适配器
+│       ├── telegram.py     # Telegram 适配器
+│       ├── weixin.py       # 微信适配器
+│       ├── discord.py      # Discord 适配器
+│       └── ...             # 20+ 平台适配器
+├── tools/                  # 内置工具集
+│   ├── toolsets.py         # 工具自注册与组合机制
+│   ├── terminal.py         # 终端命令执行
+│   ├── execute_code.py     # 沙盒代码执行
+│   ├── browser.py          # Playwright 浏览器控制
+│   ├── file_ops.py         # 文件读写操作
+│   ├── web_search.py       # 网页搜索
+│   └── ...                 # 40+ 工具实现
+├── providers/              # LLM 供应商适配层
+│   ├── nous_portal.py      # Nous Portal 网关
+│   ├── openai_provider.py  # OpenAI 适配
+│   ├── anthropic.py        # Anthropic 适配
+│   ├── ollama.py           # 本地 Ollama 适配
+│   └── ...                 # 其他供应商
+├── skills/                 # 内置与社区技能（Markdown 格式）
+├── optional-skills/        # 可选安装的扩展技能
+├── plugins/                # 插件系统
+├── optional-mcps/          # 可选 MCP 服务器集成
+├── cron/                   # 定时任务调度器
+├── environments/           # 运行环境后端
+│   ├── local.py            # 本地执行
+│   ├── docker_env.py       # Docker 容器
+│   ├── ssh_env.py          # SSH 远程
+│   ├── modal_env.py        # Modal Serverless
+│   └── daytona_env.py      # Daytona Serverless
+├── tui_gateway/            # TUI（终端界面）网关
+├── ui-tui/                 # 终端 UI 实现
+├── web/                    # Web 组件
+├── apps/                   # 配套应用
+├── scripts/                # 安装与运维脚本
+│   ├── install.sh          # 一键安装脚本
+│   └── setup-hermes.sh     # 环境配置脚本
+├── docker/                 # Docker 相关配置
+├── nix/                    # Nix 可复现环境配置
+├── tests/                  # 测试套件
+├── docs/                   # 项目文档
+├── website/                # 官方文档网站源码
+├── locales/                # 多语言国际化
+├── assets/                 # 静态资源
+├── .github/                # GitHub CI/CD 工作流
+├── .plans/                 # 项目规划文件
+├── cli.py                  # CLI 主入口
+├── run_agent.py            # Agent 启动入口
+├── hermes_bootstrap.py     # 引导程序
+├── mcp_serve.py            # MCP 服务器模式入口
+├── batch_runner.py         # 批量轨迹生成（用于训练数据）
+├── trajectory_compressor.py # 轨迹压缩器
+├── mini_swe_runner.py      # SWE 基准评测
+├── pyproject.toml          # Python 项目配置（含依赖声明）
+├── package.json            # Node.js 依赖（浏览器工具等）
+├── Dockerfile              # 容器镜像定义
+├── docker-compose.yml      # 容器编排配置
+├── flake.nix               # Nix Flake 定义
+├── .env.example            # 环境变量模板
+├── cli-config.yaml.example # CLI 配置模板
+├── AGENTS.md               # Agent 行为指令
+├── CONTRIBUTING.md         # 贡献指南
+├── SECURITY.md             # 安全策略
+└── README.md               # 项目说明
+```
+
+**架构设计原则**：
+
+Hermes Agent 遵循六项核心设计理念：
+
+1. **提示词恒定**：对话期间系统预设指令保持不变，避免模型表现突变，同时保护前缀缓存有效，降低推理成本。
+2. **过程透明**：借助回调机制实时向用户展示所有工具调用细节，执行过程完全可观测。
+3. **随时阻断**：允许通过系统信号或用户输入中止任何执行步骤，保障操作安全。
+4. **核心独立**：Agent 底层逻辑不绑定特定平台，CLI、Gateway、WebUI 等多种入口共享同一实例。
+5. **组件解耦**：记忆、插件、Skill 等模块按需加载，避免冗余依赖。
+6. **环境隔离**：支持运行多个独立配置与内存空间的实例（Profile），满足多场景需求。
+
+**核心组件关系**：
+
+```
+用户消息（CLI / 飞书 / 微信 / Telegram ...）
+        ↓
+   ┌─────────────┐
+   │  Gateway     │ ← gateway/run.py 管理生命周期
+   │  消息网关    │ ← gateway/platforms/ 适配各平台
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  Agent 循环  │ ← agent/run_agent.py 主循环
+   │  ┌────────┐  │
+   │  │Prompt  │  │ ← 组装系统提示词 + 记忆快照
+   │  │Builder │  │
+   │  └────────┘  │
+   │  ┌────────┐  │
+   │  │Provider│  │ ← providers/ 路由到对应 LLM
+   │  │模型路由 │  │
+   │  └────────┘  │
+   │  ┌────────┐  │
+   │  │Tool    │  │ ← tools/ 执行工具调用
+   │  │Executor│  │
+   │  └────────┘  │
+   │  ┌────────┐  │
+   │  │Skill   │  │ ← agent/skill_engine.py 检测与生成
+   │  │Engine  │  │
+   │  └────────┘  │
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  记忆持久化  │ ← SQLite + FTS5
+   │  会话存储    │ ← hermes_state.py
+   └─────────────┘
+```
+
+**关键数据流**：
+
+- **主循环流**：接收输入 → 组装提示词与记忆快照 → 模型推理 → 工具调用与结果回填 → 循环直至输出最终响应。
+- **多级记忆召回**：触发检索 → FTS5 匹配历史片段 → 模型总结 → 融合双文件快照（MEMORY.md + USER.md） → 注入当前上下文。
+- **自进化闭环**：任务结束 → 评估记忆价值 → 生成或修补 Skill → 行为建模 → 赋能后续任务。
+
+**技术栈**：
+
+| 层面 | 技术 |
+|------|------|
+| 主要语言 | Python 3.11+（核心逻辑）、JavaScript/Node.js（浏览器工具、WhatsApp Bridge） |
+| 包管理 | uv（主包管理器，Termux 降级为 pip） |
+| 状态存储 | SQLite（WAL 模式 + FTS5 全文索引） |
+| 环境管理 | Nix（flake.nix）、Docker |
+| 浏览器自动化 | Playwright（Chromium） |
+| 代码搜索 | ripgrep |
+| 多媒体处理 | ffmpeg |
+| 研究工具 | batch_runner.py（轨迹生成）、trajectory_compressor.py（轨迹压缩） |
+
+### 2.2 工具调用流程
 
 当你向 Hermes Agent 发送一条消息（无论从飞书、微信还是 CLI），它会经过以下 7 步处理流程：
 
@@ -48,7 +204,7 @@ Hermes Agent 是由知名开源 AI 研究机构 **Nous Research** 开发的一�
 
 **Step 7：写入记忆 + 回复** —— 把本次会话持久化存储，把答案发回原来的平台。
 
-### 2.2 三层记忆系统
+### 2.3 三层记忆系统
 
 Hermes Agent 的记忆架构分为三层，从上到下依次是：
 
@@ -58,7 +214,7 @@ Hermes Agent 的记忆架构分为三层，从上到下依次是：
 
 **Skill 记忆（Skill Memory）**：以 Markdown 文件形式存储在 `~/.hermes/skills/` 目录下，可移植、可分享，符合 [agentskills.io](https://agentskills.io) 开放标准。Skill 会随着使用不断打磨优化。
 
-### 2.3 Skill 自动生成机制
+### 2.4 Skill 自动生成机制
 
 这是 Hermes Agent 最独特的能力之一——自学习技能系统。
 
@@ -153,6 +309,102 @@ hermes doctor
 
 # 如果 doctor 全部通过，说明安装成功且环境正常
 ```
+
+
+### 3.4 安装后目录文件结构
+
+安装完成后，Hermes Agent 会在用户主目录下创建 `~/.hermes/` 作为核心数据目录。以下是完整的目录结构和各文件说明：
+
+```
+~/.hermes/
+├── hermes-agent/            # Git 克隆的源码仓库
+│   ├── agent/               # 核心 Agent 引擎代码
+│   ├── hermes_cli/          # CLI 命令行实现
+│   ├── gateway/             # 消息网关代码
+│   ├── tools/               # 工具集实现
+│   ├── providers/           # LLM 供应商适配
+│   ├── skills/              # 内置技能
+│   ├── plugins/             # 插件系统
+│   ├── environments/        # 运行环境后端
+│   ├── .venv/               # Python 虚拟环境（uv 创建）
+│   ├── pyproject.toml       # 项目依赖声明
+│   └── ...                  # 其他源码文件
+│
+├── config.yaml              # 主配置文件（模型、终端后端、TTS、压缩等通用设置）
+├── .env                     # 环境变量文件（存放 API Key 和密钥，敏感信息）
+├── auth.json                # OAuth 认证凭据（GitHub Copilot、Anthropic OAuth 等）
+│
+├── SOUL.md                  # Agent 人格定义（注入系统提示词的核心身份文件）
+├── AGENTS.md                # 工作区指令（定义 Agent 的行为规范和约定）
+│
+├── memories/                # 持久记忆目录
+│   ├── MEMORY.md            # 环境事实记忆（项目约定、技术栈、工具配置等）
+│   ├── USER.md              # 用户画像记忆（偏好、习惯、个人信息等）
+│   └── daily/               # 每日记忆日志
+│       ├── 2025-06-20.md    # 按日期记录的日常交互细节
+│       └── ...
+│
+├── skills/                  # Skill 技能目录
+│   ├── web-research/        # 自动生成的技能（Markdown 格式）
+│   │   └── SKILL.md         # 技能定义文件
+│   ├── code-review/
+│   │   └── SKILL.md
+│   └── openclaw-imports/    # 从 OpenClaw 迁移的技能
+│       └── ...
+│
+├── sessions/                # Gateway 会话数据
+│   ├── feishu/              # 按平台分隔的会话存储
+│   ├── weixin/
+│   └── ...
+│
+├── cron/                    # 定时任务配置
+│   ├── jobs.json            # 任务定义
+│   └── runs/                # 执行历史记录
+│
+├── logs/                    # 系统日志目录
+│   ├── agent.log            # Agent 主日志（密钥自动脱敏）
+│   ├── gateway.log          # 网关日志
+│   └── errors.log           # 错误日志
+│
+├── cache/                   # 缓存目录
+│   ├── remote-syncs/        # 远程沙盒文件同步
+│   │   └── <session-id>/    # 按会话 ID 隔离
+│   ├── media/               # 多媒体缓存（图片、音频等）
+│   └── ...
+│
+├── pending/                 # 待审批内容
+│   └── skills/              # Agent 生成的 Skill 修改（需用户审批）
+│
+├── home/                    # 子进程 HOME 目录（Profile 隔离或容器执行时使用）
+│
+├── sandboxes/               # 沙盒环境
+│   └── singularity/         # Singularity/Apptainer 容器的临时目录
+│
+├── modal_snapshots.json     # Modal Serverless 环境的文件系统快照追踪
+│
+└── hermes                   # 全局可执行文件（或符号链接到 ~/.local/bin/hermes）
+```
+
+**各关键文件详解**：
+
+**`config.yaml`**：主配置文件，存储模型选择、终端后端类型（local/docker/ssh/modal/daytona）、TTS 语音配置、上下文压缩策略、工具启用状态等通用设置。可通过 `hermes config edit` 或 `hermes config set` 修改。
+
+**`.env`**：环境变量文件，存放所有 API Key 和敏感凭据。不同供应商的密钥以 `KEY=value` 格式逐行存放。此文件应妥善保管，避免泄露。
+
+**`auth.json`**：OAuth 认证凭据文件，保存通过浏览器设备码流程获取的 Token（如 GitHub Copilot、Anthropic OAuth 等）。
+
+**`SOUL.md`**：Agent 的人格定义文件，定义 Agent 的身份、语气、沟通风格等。内容会被注入到系统提示词中，是塑造 Agent 行为的核心文件。
+
+**`memories/MEMORY.md` + `USER.md`**：双文件记忆架构。`MEMORY.md` 记录环境事实（项目信息、技术约定等），`USER.md` 记录用户偏好（习惯、个人信息等）。两者分离设计，按需加载。
+
+**`memories/daily/`**：每日记忆日志目录，以 `YYYY-MM-DD.md` 格式命名，记录当天交互的详细细节。这部分内容不会自动加载到上下文中，只在 Agent 需要时通过记忆检索工具按需召回。
+
+**`skills/`**：Skill 技能文件目录，每个 Skill 是一个子目录，内含 `SKILL.md` 定义文件（Markdown 格式），包含技能名称、触发条件、执行步骤和边界情况处理。
+
+**`sessions/`**：Gateway 会话数据，按平台（飞书、微信、Telegram 等）分隔存储，支持跨平台数据隔离。
+
+**日志自动脱敏**：`logs/` 目录下的日志文件会自动对 API Key 等敏感信息进行脱敏处理，即使分享日志也不会泄露密钥。
+
 
 ## 四、安装常见问题（国内网络环境）
 
