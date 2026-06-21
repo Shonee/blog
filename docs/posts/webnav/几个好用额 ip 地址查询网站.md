@@ -6,3 +6,5 @@
 5. https://whoer.net/zh
 6. https://whoer.com/zh/
 7. https://scamalytics.com/
+8. https://ipcheck.ing/
+9. https://my-ip-six-pied.vercel.app/
