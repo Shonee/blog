@@ -12,7 +12,7 @@ coverImage: imgs/cover.png
 
 ### 什么是 Playwright
 
-**[Playwright](https://github.com/microsoft/playwright)** 是由微软开发并维护的开源浏览器自动化框架，专为 Web 测试、AI Agent 交互和自动化脚本而设计。它提供统一的 API 来操控三大浏览器引擎——Chromium、Firefox 和 WebKit，支持 Python、TypeScript、Java 和 .NET 四种语言绑定。
+**Playwright** 是由微软开发并维护的开源浏览器自动化框架，专为 Web 测试、AI Agent 交互和自动化脚本而设计。它提供统一的 API 来操控三大浏览器引擎——Chromium、Firefox 和 WebKit，支持 Python、TypeScript、Java 和 .NET 四种语言绑定。
 
 在 AI Agent 领域，Playwright 的价值不仅限于传统测试，它更是 Agent 感知和操作 Web 世界的核心基础设施。Hermes Agent 正是借助 Playwright 的 Python 绑定实现了零成本的本地浏览器自动化能力。
 
@@ -57,7 +57,7 @@ playwright/
 
 ### 什么是 Hermes Agent
 
-**[Hermes Agent](https://github.com/NousResearch/hermes-agent)** 是由 Nous Research 开发的开源 AI Agent 框架，定位为"与你共同成长的智能助手"。它具备持久记忆、工具调用、技能系统、多模型支持和浏览器自动化等能力，可运行在本地或云端。
+**Hermes Agent** 是由 Nous Research 开发的开源 AI Agent 框架，定位为"与你共同成长的智能助手"。它具备持久记忆、工具调用、技能系统、多模型支持和浏览器自动化等能力，可运行在本地或云端。
 
 ### 浏览器工具在 Hermes 中的定位
 
@@ -207,6 +207,71 @@ hermes doctor
 ```
 
 `hermes doctor` 会检查所有依赖和配置是否就绪，包括浏览器工具是否可用。
+
+### 国内安装加速
+
+在国内网络环境下，安装 Playwright 和 Chromium 可能非常缓慢。以下是加速方案：
+
+**pip 换源（加速 Python 包安装）：**
+
+```bash
+# 使用清华镜像（推荐）
+pip install playwright -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 或永久配置
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+常用国内 PyPI 镜像源：清华 TUNA（`https://pypi.tuna.tsinghua.edu.cn/simple`）、阿里云（`https://mirrors.aliyun.com/pypi/simple`）、中科大（`https://pypi.mirrors.ustc.edu.cn/simple`）。
+
+**浏览器二进制下载加速：**
+
+```bash
+# 使用 npmmirror 镜像下载 Chromium
+export PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright
+playwright install chromium
+```
+
+**一键完整安装（国内加速版）：**
+
+```bash
+pip install playwright -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright playwright install chromium
+```
+
+**永久生效（写入 shell 配置）：**
+
+```bash
+echo 'export PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**agent-browser 国内加速：**
+
+```bash
+# npm 换源
+npm config set registry https://registry.npmmirror.com
+npm install -g agent-browser
+
+# Chrome for Testing 下载慢？跳过安装，复用本地 Chrome
+# agent-browser 会自动检测已安装的 Chrome/Brave，无需单独下载
+agent-browser open https://example.com
+```
+
+**Hermes Agent 完整安装加速：**
+
+```bash
+# 先配置所有镜像源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+npm config set registry https://registry.npmmirror.com
+export PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright
+
+# 有代理的话也配上
+export HTTPS_PROXY=http://127.0.0.1:7890
+
+# 然后运行安装脚本
+bash scripts/install.sh
+```
 
 ***
 
@@ -540,3 +605,6 @@ hermes doctor
 * [Playwright 官方网站](https://playwright.dev/)
 * [agent-browser (Vercel Labs)](https://github.com/vercel-labs/agent-browser)
 * [Hermes Agent GitHub 仓库](https://github.com/NousResearch/hermes-agent)
+* [Playwright 从入门到安装：最全中文教程（2026 最新版） - 海上华帆 - 博客园](https://www.cnblogs.com/aiparallelworld/p/19653198)
+* [Playwright框架介绍，环境安装。](https://www.zhihu.com/tardis/zm/art/628312354?source_id=1003) 
+
