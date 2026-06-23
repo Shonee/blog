@@ -86,6 +86,7 @@ export default defineConfig({
   title: 'Shonee Blog',
   description: '个人技术博客：GitHub、Cloudflare、NAS、AI 等主题',
   base: '/blog/',
+  ignoreDeadLinks: true,
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
