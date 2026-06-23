@@ -634,7 +634,7 @@ docker run -d --name excalidraw \
   excalidraw/excalidraw:latest
 ```
 
-打开 http://localhost:3000 即可使用。**注意：这种方式不带协作功能**（协作需要 §8.4 的 excalidraw-room）。
+打开 `http://localhost:3000` 即可使用。**注意：这种方式不带协作功能**（协作需要 §8.4 的 excalidraw-room）。
 
 升级：
 
