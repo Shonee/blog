@@ -11,7 +11,7 @@ const PAGE_SIZE = 10
 const displayed = ref(PAGE_SIZE)
 const sentinel = ref(null)
 
-const monthNames = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+const monthFmt = new Intl.DateTimeFormat('zh-CN', { month: 'long' })
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
@@ -32,10 +32,9 @@ function getYear(dateStr) {
 function getMonth(dateStr) {
   if (!dateStr) return '未知月份'
   const d = new Date(dateStr)
-  return isNaN(d.getTime()) ? '未知月份' : monthNames[d.getMonth()]
+  return isNaN(d.getTime()) ? '未知月份' : monthFmt.format(d)
 }
 
-// sorted newest first (data loader already sorts, but ensure)
 const sorted = computed(() =>
   [...posts].sort((a, b) => {
     if (a.date && b.date) return new Date(b.date) - new Date(a.date)
@@ -71,7 +70,7 @@ function loadMore() {
 let observer = null
 onMounted(() => {
   observer = new IntersectionObserver(
-    (entries) => { if (entries[0].isIntersecting) loadMore() },
+    (entries) => { if (entries.length > 0 && entries[0].isIntersecting) loadMore() },
     { rootMargin: '200px' }
   )
   if (sentinel.value) observer.observe(sentinel.value)
