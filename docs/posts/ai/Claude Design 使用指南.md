@@ -1,3 +1,10 @@
+---
+title: "Claude Design 使用指南"
+summary: Claude Design 使用指南
+description: Claude Design 使用指南
+---
+
+
 ## 一、引言：当"会写代码的模型"开始做设计
 
 2026 年 4 月，Anthropic 通过 Anthropic Labs 推出了 **Claude Design**——一个不再把设计稿当作静态图层、而是直接生成"可交互前端原型"的对话式设计工具。它最颠覆性的一点在于：输出物本质是 **代码（HTML / CSS / React + 数据结构）**，而不是 PSD 或 Figma 图层。
