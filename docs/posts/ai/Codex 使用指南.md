@@ -1,8 +1,16 @@
-# Codex 完全指南：从安装到进阶的编程智能体使用指南
+---
+title: Codex 使用指南
+date: 2026-06-20
+category: ai
+tags:
+  - codex
+---
+
+# Codex 使用指南：从安装到进阶的编程智能体使用指南
 
 ## 一、Codex 是什么
 
-Codex 是 OpenAI 推出的编程智能体（Coding Agent）产品线。它不是传统的代码补全插件，而是一个能读仓库、跑命令、改文件、解释结果的 AI 编程协作工具。你可以把它理解为一个坐在你电脑里的编程搭档——它能理解项目上下文，执行终端命令，修改源代码，运行测试，并把结果反馈给你。
+[Codex](https://openai.com/zh-Hans-CN/codex/) 是 OpenAI 推出的编程智能体（Coding Agent）产品线。它不是传统的代码补全插件，而是一个能读仓库、跑命令、改文件、解释结果的 AI 编程协作工具。你可以把它理解为一个坐在你电脑里的编程搭档——它能理解项目上下文，执行终端命令，修改源代码，运行测试，并把结果反馈给你。
 
 Codex 的代码仓库托管在 GitHub（[openai/codex](https://github.com/openai/codex)），主要使用 Rust 编写（占比 96.3%），采用 Apache-2.0 开源协议。
 
@@ -668,6 +676,8 @@ App 常卡 Microsoft Store；CLI 常卡 npm 和安装脚本。先用官方脚本
 
 ## 参考资料
 
+- [ChatGPT](https://chatgpt.com/)
+- [OpenAI APi](https://openai.com/zh-Hans-CN/api/)
 - [OpenAI Codex GitHub 仓库](https://github.com/openai/codex)
 - [OpenAI Codex 官方文档](https://developers.openai.com/codex)
 - [Codex CLI 快速入门](https://developers.openai.ac.cn/codex/quickstart?setup=cli)
