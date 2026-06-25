@@ -1,3 +1,13 @@
+---
+title: Codex 与 Claude 账号注册指南
+date: 2026-06-25
+category: ai
+tags:
+  - claude
+  - codex
+  - 账号注册
+---
+
 # Codex 与 Claude 账号注册指南
 
 ## 一、通用前置准备
