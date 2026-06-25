@@ -1,5 +1,5 @@
 ---
-title: claude/codex购买+稳定代理方式
+title: CodeX 和 Claude 购买+稳定代理方式
 date: 2026-06-25
 category: ai
 tags:
@@ -8,7 +8,7 @@ tags:
 ---
 
 
-# claude/codex购买+稳定代理方式
+# CodeX 和 Claude 购买+稳定代理方式
 
 # 一.购买方式
 
