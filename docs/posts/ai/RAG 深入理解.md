@@ -1,5 +1,5 @@
 ---
-title: 深入理解 RAG
+title: RAG 深入理解
 tags: [RAG, LLM, AI, 检索增强生成, 知识工程]
 updated: 2026-06-24
 ---
