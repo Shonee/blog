@@ -56,49 +56,37 @@
 
 先用一段话说明：[项目名称] 由哪些核心组件组成，例如 Web 服务、数据库、缓存、任务队列、文件存储、反向代理等。
 
+图表默认使用 Mermaid 语法，适合 GitHub 和多数 Markdown 预览工具直接渲染。如果目标发布平台只支持 PlantUML，再按平台要求改写图表语法。
+
 ### 5.1 部署架构图
 
-```plantuml
-@startuml
-title [项目名称] Docker 部署架构
+```mermaid
+flowchart LR
+  user["用户"] -->|"HTTP/HTTPS"| proxy["Reverse Proxy<br/>Nginx/Caddy/Traefik"]
 
-actor User as user
-node "Docker Host" {
-  component "[项目名称] App" as app
-  database "Database\n(SQLite/PostgreSQL/MySQL)" as db
-  folder "Volume\n持久化数据" as volume
-  component "Reverse Proxy\nNginx/Caddy/Traefik" as proxy
-}
-
-user --> proxy : HTTPS/HTTP
-proxy --> app : 转发请求
-app --> db : 读写业务数据
-app --> volume : 保存配置/附件/日志
-
-@enduml
+  subgraph host["Docker Host"]
+    proxy -->|"转发请求"| app["[项目名称] App<br/>应用服务"]
+    app -->|"读写业务数据"| db[("Database<br/>SQLite/PostgreSQL/MySQL")]
+    app -->|"保存配置/附件/日志"| volume[("Volume<br/>持久化数据")]
+  end
 ```
 
 ### 5.2 容器启动流程图
 
-```plantuml
-@startuml
-title [项目名称] 启动流程
-
-start
-:读取 docker-compose.yml;
-:拉取镜像;
-:创建网络;
-:挂载数据卷;
-:注入环境变量;
-:启动应用容器;
-if (依赖数据库?) then (是)
-  :等待数据库就绪;
-endif
-:应用初始化;
-:浏览器访问 http://服务器IP:端口;
-stop
-
-@enduml
+```mermaid
+flowchart TD
+  start([开始]) --> read["读取 docker-compose.yml"]
+  read --> pull["拉取镜像"]
+  pull --> network["创建网络"]
+  network --> volume["挂载数据卷"]
+  volume --> env["注入环境变量"]
+  env --> startContainer["启动应用容器"]
+  startContainer --> hasDb{"依赖数据库?"}
+  hasDb -->|"是"| waitDb["等待数据库就绪"]
+  hasDb -->|"否"| init["应用初始化"]
+  waitDb --> init
+  init --> visit["浏览器访问 http://服务器IP:端口"]
+  visit --> done([完成])
 ```
 
 ## 6. 部署前准备
@@ -495,7 +483,7 @@ docker compose logs -f
 
 - 文章要让非资深运维也能理解：每个关键命令后说明它做了什么；每个配置项后说明为什么需要它；每个风险点后说明如何避免。
 
-- 请为架构、启动流程、请求链路或数据流生成 PlantUML/UML 语法图，图中的组件名称要贴合该项目真实模块，不要使用过于通用的占位词。
+- 请为架构、启动流程、请求链路或数据流生成 Mermaid 语法图，优先使用 `flowchart`、`sequenceDiagram` 等常见图表类型，确保 GitHub 和多数 Markdown 预览工具可以直接渲染。图中的组件名称要贴合该项目真实模块，不要使用过于通用的占位词。如果发布平台明确只支持 PlantUML，再额外提供 PlantUML 版本。
 
 - 功能展示部分不要只写“如下图所示”。需要说明截图对应的真实操作、页面能解决的问题、读者应该关注的配置或状态。
 
