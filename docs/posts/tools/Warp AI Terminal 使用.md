@@ -1,5 +1,5 @@
 ---
-title: CodeServer 使用教程
+title: Warp AI Terminal 使用
 date: 2026-06-29
 category: shell
 tags:
