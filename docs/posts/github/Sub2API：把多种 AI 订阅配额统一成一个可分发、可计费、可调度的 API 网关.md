@@ -13,6 +13,9 @@ tags:
 > 项目地址：<https://github.com/Wei-Shaw/sub2api>  
 > 说明：本文基于项目 README、README_CN、部署文档、仓库目录和 GitHub 页面公开信息整理。Sub2API 涉及上游 AI 服务账号、订阅配额和 API 转发，使用前必须先确认当地法律法规、上游服务条款和自身合规边界。
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b44bce6c-6fd0-4893-b96b-c27d9c410129" />
+
+
 ## 1. 项目介绍
 
 Sub2API 是一个面向 AI 订阅配额分发的开源 API 网关平台。它的核心目标不是再做一个大模型聚合客户端，而是把 Claude、OpenAI、Gemini、Antigravity、Grok / xAI 等上游订阅或账号能力，包装成平台侧统一生成、统一管理、统一计费的 API Key。
