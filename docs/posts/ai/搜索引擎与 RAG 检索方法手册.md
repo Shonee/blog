@@ -662,6 +662,7 @@ NDCG 衡量排序质量，尤其适合结果有不同相关性等级的情况。
 -> 分词 / 词典
 -> Embedding 模型
 -> 检索策略
+-> RAG Fusion
 -> Rerank
 -> Metadata
 -> Prompt / 生成约束
