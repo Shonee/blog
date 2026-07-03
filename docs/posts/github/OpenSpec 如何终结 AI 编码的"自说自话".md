@@ -9,6 +9,7 @@ tags:
 # 58.5k Star 的「需求对齐神器」：OpenSpec 如何终结 AI 编码的"自说自话"
 
 > 你花 30 秒把需求描述给 AI 助手，它花 3 分钟写完代码——然后你发现方向完全跑偏。删掉重来，再描述一遍，再跑偏。对话越长，AI 忘的越多。这不是模型笨，是缺一个「先对齐、再动手」的机制。
+> 一页纸：https://github.com/Shonee/html-tools/blob/master/pages/paper/openspec.html
 
 ## 1. 项目速览
 
