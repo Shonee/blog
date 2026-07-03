@@ -1,5 +1,5 @@
 ---
-title: Ghostty 使用文档
+title: LangChain 深入理解
 date: 2026-07-02
 category: ai
 tags:
