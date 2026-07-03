@@ -13,6 +13,8 @@ tags:
 
 当你用 AI 写代码发现产出"碰运气"时，GitHub 官方给了一个答案：**先写规范（Spec），再让 AI 按规范编码**。Spec Kit 就是这套流程的一站式 CLI 工具包——从需求定义、技术规划、任务拆解到自动实现，全程 7 条斜杠命令。
 
+一页纸：https://github.com/Shonee/html-tools/blob/master/pages/paper/spec-kit.html
+
 ## 项目速览
 
 | 维度 | 数据 |
