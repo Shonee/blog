@@ -9,6 +9,7 @@ tags:
 # 245k Star，AI 编码界的「军规手册」：Superpowers 如何把你的 Agent 从实习生变成高级工程师
 
 > 你让 Claude 帮你加个功能，它二话不说就开始写代码——没问你想要什么、没写测试、没做设计。3 分钟后代码交出来了，能跑，但方向偏了一半。这不是模型不聪明，是没人告诉它「写代码前先问清楚需求」。Superpowers 做的事情很简单：给你的 AI 编码助手一套工程纪律。
+> 一页纸：https://github.com/Shonee/html-tools/blob/master/pages/paper/superpowers.html
 
 ## 1. 项目速览
 
