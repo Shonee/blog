@@ -10,6 +10,7 @@ tags:
 # 你的 AI 编码 Agent 还在逐文件 grep？CodeGraph 一条命令让它拿到全局代码地图
 
 > 一个预索引代码知识图谱，让 Claude Code、Cursor、Codex 等 Agent 减少 58% 工具调用，提速 22%，文件读取降至接近零。
+> 一页纸：https://github.com/Shonee/html-tools/blob/master/pages/paper/codegraph.html
 
 ## 1. 一句话定位
 
