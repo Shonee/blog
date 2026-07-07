@@ -58,13 +58,13 @@ Sun-Panel 的资源消耗很低，基本上能跑 Docker 的设备都能装：
 1. 登录进入 NAS，在需要安装的位置创建 sun-panel 目录，用于存放镜像数据
 <img width="956" height="368" alt="image" src="https://github.com/user-attachments/assets/a4a8251e-925d-4904-8b08-0b1aeace4943" />
 
-2. 为了将部署镜像的相关数据和配置映射到 NAS 本地，还需要在 sun-panel 目录下创建 conf 和 docker.sock 两个文件夹
-<img width="1330" height="280" alt="image" src="https://github.com/user-attachments/assets/e46a8be9-7273-43b7-96f8-e81b09f9eb94" />
+2. 为了将部署镜像的相关数据和配置映射到 NAS 本地，还需要在 sun-panel 目录下创建 conf 文件夹存放镜像配置数据
+<img width="1798" height="430" alt="image" src="https://github.com/user-attachments/assets/30460a0c-5c61-4e00-946c-f77cb7af7ee3" />
 
 3. 打开 Docker，点击左侧项目 Tab，点击右侧创建项目按钮，弹出创建页面，填入创建项目相关信息如下
-<img width="2060" height="1528" alt="image" src="https://github.com/user-attachments/assets/3c04253f-795d-4035-8ba7-cc48070143a9" />
+<img width="2078" height="1542" alt="image" src="https://github.com/user-attachments/assets/9781f61d-0e1d-4b9d-aa54-15ed4afd64e2" />
 
-4. 其中，docker-compose 文件配置如下，需要修改路径为本地 NAS 创建的 sun-panel 目录
+4. docker-compose 文件配置如下，需要修改路径为本地 NAS 创建的 sun-panel 目录
 ```yaml
 services:
   sun-panel:
@@ -74,9 +74,10 @@ services:
     ports:
       - "3002:3002"
     volumes:
-      - ./conf:/app/conf
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /volume2/docker/sun-panel/conf:/app/conf
+      - /var/docker/docker.sock:/var/run/docker.sock
 ```
+/volume2/docker/sun-panel/conf 是存放应用配置数据；/var/docker/docker.sock 是关联 NAS docker 配置，以便面板中管理 Docker
 4. 点击右下角立即部署按钮，Docker 便开始拉取镜像并部署，如下则表示拉取部署完成
 <img width="1230" height="758" alt="image" src="https://github.com/user-attachments/assets/d57436df-77b9-49ed-981e-a8d927c36f97" />
 
