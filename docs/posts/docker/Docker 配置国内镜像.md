@@ -21,6 +21,7 @@ Docker 中的这些镜像默认存在 Docker Hub（`hub.docker.com`），服务�
 
 无论是 Linux、Windows 或者 NAS 上的 Docker，都得先配好镜像源，如 NAS 装 Jellyfin、Alist、Home Assistant 等产品，都是拉 Docker 镜像实现部署。
 
+---
 
 ### 目前可用的镜像源
 
@@ -29,6 +30,7 @@ Docker 中的这些镜像默认存在 Docker Hub（`hub.docker.com`），服务�
 | 镜像源 | 加速地址 | 说明 |
 |-------|---------|------|
 | DaoCloud | `https://docker.m.daocloud.io` | 运营时间最长，支持 Docker Hub / GCR / GHCR / Quay 等多个仓库 |
+| 毫秒镜像 | `https://docker.1ms.run` | 下载速度快，2026 年持续高可用，多平台兼容 |
 | 1Panel 镜像站 | `https://docker.1panel.live` | 1Panel 面板团队维护 |
 | Hub Proxy | `https://hub.rat.dev` | 速度不错，但稳定性看维护者心情 |
 | 渡渡鸟同步站 | `https://docker.aityp.com` | 带镜像搜索功能，找特定版本方便 |
@@ -38,9 +40,64 @@ Docker 中的这些镜像默认存在 Docker Hub（`hub.docker.com`），服务�
 
 如果不想折腾就默认使用 DaoCloud，覆盖的仓库最全，实际配置时可以填多个镜像地址做冗余，万一挂了一个 Docker 会自动尝试使用下一个。
 
-### 配置方法一：改 daemon.json（全局生效，改一次就行）
+---
+
+### 需认证 / 受限环境镜像源
+
+| 名称 | 地址 | 认证要求 | 适用场景 |
+|------|------|----------|----------|
+| 腾讯云 | `https://mirror.ccs.tencentyun.com` | 仅腾讯云内网 | 腾讯云 CVM 服务器 |
+| 阿里云 | `https://<your-id>.mirror.aliyuncs.com` | 需登录获取专属 ID | 阿里云 ECS 服务器 |
+| 厚浪镜像 | `https://mirror.houlang.cloud` | 需注册登录获取令牌 | 通用 |
+| 建木 Hub | `https://image.jianmuhub.com/` | 需注册登录 | 通用 |
+
+---
+
+### 配置方法
+
+#### 1. 改 daemon.json（全局生效，改一次就行）
 
 这是 Docker 镜像配置的标准做法，配置完成之后所有 `docker pull` 命令都会走加速源。
+
+##### Linux（Docker Engine）
+
+编辑 `/etc/docker/daemon.json`：
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io",
+    "https://docker.xuanyuan.me",
+    "https://docker.1panel.live",
+    "https://dockerproxy.net"
+  ]
+}
+```
+
+重启 Docker：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+##### macOS（Docker Desktop）
+
+打开 Docker Desktop → Settings → Docker Engine，在 JSON 配置中添加：
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io",
+    "https://docker.xuanyuan.me"
+  ]
+}
+```
+点击 **Apply & restart**。
+
+##### NAS
 
 打开本地命令行，或使用 SSH 登录到 NAS 或服务器的命令终端，执行：
 
@@ -62,12 +119,16 @@ sudo systemctl restart docker
 需要注意的点：
 JSON 格式要求严格，少一个逗号或多一个逗号，Docker 服务会起不来。如果改完 Docker 挂了，先检查 `daemon.json` 的 JSON 语法
 
+##### 验证是否生效
+
 ```bash
 # 验证一下，执行完成能看到配置的地址就说明生效了。
 docker info | grep -A 5 "Registry Mirrors"
 ```
 
-## 配置方法二：拉取时加前缀（单次生效，每次使用时配置）
+
+
+#### 2. 拉取时加前缀（单次生效，每次使用时配置）
 
 如果不想修改全局的配置文件，可以在每次拉取时在镜像名前面拼上加速源的域名：
 
@@ -89,7 +150,7 @@ docker pull m.daocloud.io/ghcr.io/home-assistant/home-assistant:latest
 1. Docker Hub 的官方镜像（nginx、redis、mysql 这些），实际路径是 `library/nginx`，用加前缀方式时，`library/` 不能省，否则会报找不到。
 2. 如果用的是方法一（daemon.json 全局配置），Docker 会自动补 `library/`。
 
-### 配置方法三：Docker Compose 文件中指定镜像地址
+#### 3. Docker Compose 文件中指定镜像地址
 
 有时候从网上看到一个好的 Docker 项目，拿到一个 `docker-compose.yml` 文件就想直接部署，却发现根本用不了，这个时候就可能是镜像地址访问不通，这时候把里面 `image:` 字段的镜像名换成带前缀的镜像源即可：
 
@@ -117,3 +178,10 @@ daemon.json 配置 > Docker Compose = docker pull
 - Docker Compose 可以保留参数和配置，镜像迁移和分享可以直接复制执行；
 - docker pull，使用最方便，快速部署镜像时推荐使用；
 
+### 使用建议
+
+1. **多配几个**：镜像源随时可能失效，建议配置 3-5 个，Docker 会自动回退
+2. **优先免认证的**：认证类镜像在 CI/CD 场景下配置更复杂
+3. **云厂商环境用对应镜像**：腾讯云用腾讯云镜像，阿里云用阿里云镜像，速度最快
+4. **拉取失败时换源重试**：某个源抽风时，换一个地址即可
+5. **注意时效性**：国内镜像源变动频繁，建议每季度检查一次可用性
