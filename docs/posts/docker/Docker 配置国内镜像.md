@@ -1,3 +1,11 @@
+---
+title: 镜像拉了两小时？教你在 Docker 中配置国内镜像
+date: 2026-07-01
+category: docker
+tags:
+  - 镜像
+---
+
 # 镜像拉了两小时？教你在 Docker 中配置国内镜像
 
 Docker 拉镜像拉不动，十有八九是镜像源的问题。
