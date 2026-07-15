@@ -335,6 +335,48 @@ docker image prune -a
 
 ## 常见问题
 
+### 找不到时区数据报错
+> File "/lsiopy/lib/python3.12/site-packages/tzlocal/utils.py", line 105, in _tz_from_env
+    raise zoneinfo.ZoneInfoNotFoundError(
+zoneinfo._common.ZoneInfoNotFoundError: 'tzlocal() does not support non-zoneinfo timezones like "Asia/Shanghai". \nPlease use a timezone in the form of Continent/City'
+
+这个错误是 calibre-web 容器里 Python 的 tzlocal 库找不到时区数据导致的。虽然 Asia/Shanghai 格式本身是正确的（Continent/City），但容器内缺少 tzdata 包，zoneinfo 无法解析这个时区。
+
+修复方法：在 docker-compose.yml 的 calibre-web 服务里加一行环境变量：
+
+```yaml
+environment:
+  - TZ=Asia/Shanghai
+  - PUID=1000
+  - PGID=1000
+```
+
+如果已经有 TZ 但还是报错，说明容器基础镜像没有安装 tzdata。可以进容器手动装一下：
+
+#### Alpine 基础镜像
+```bash
+docker exec -it <容器名> apk add --no-cache tzdata
+```
+
+##### Debian/Ubuntu 基础镜像
+```bash
+docker exec -it <容器名> apt-get update && apt-get install -y tzdata
+```
+装完后重启容器： `docker restart <容器名>`
+
+如果是 linuxserver/calibre-web 镜像
+
+这个镜像基于 Alpine，通常已经带了 tzdata。如果还是报错，可能是镜像版本较新去掉了这个包。你可以在 docker-compose.yml 里加一个初始化脚本挂载，或者直接用 docker exec 进容器装一下。
+
+装完后可以进容器 Python 环境验证：
+
+```bash
+docker exec -it <容器名> python3 -c "from zoneinfo import ZoneInfo; print(ZoneInfo('Asia/Shanghai'))"
+```
+
+如果正常打印时区信息，再重启 calibre-web 就不会报这个错了。
+
+
 ### metadata.db 找不到
 
 启动后页面提示找不到数据库，检查两件事：
