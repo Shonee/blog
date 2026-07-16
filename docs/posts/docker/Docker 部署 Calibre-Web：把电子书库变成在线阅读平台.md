@@ -424,3 +424,8 @@ Calibre-Web 搭好后，下一步可以做的事：
 - 接入 LDAP 或 OAuth 登录，免去手动管理账号
 - 用 Calibre 桌面端的「发送到设备」功能把新书自动同步到书库
 - 部署 Watchtower 自动拉取新版本（LinuxServer 官方不推荐，但社区用得挺多）
+
+## 参考文档
+
+-  [《树莓派防吃灰》第十六期：安装Calibre Web建立公网可访问私人电子书库 - 少数派](https://sspai.com/post/82228) 
+-  [(99+ 封私信) 告别杂乱电子书！Calibre-Web打造私人在线图书馆 - 知乎](https://zhuanlan.zhihu.com/p/1949414654502740442) 
