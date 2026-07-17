@@ -1,4 +1,6 @@
 ---
+title: Java 多线程按序交替打印：八种实现方案全解析
+category: java
 tags:
   - Java
   - 并发编程
@@ -6,6 +8,7 @@ tags:
   - 面试题
 created: 2026-07-17
 ---
+
 
 # Java 多线程按序交替打印：八种实现方案全解析
 
