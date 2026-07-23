@@ -347,3 +347,108 @@ lsof -i :5700
 ## 下一步做什么
 
 面板起来后，先去「订阅管理」加一个你常用的脚本仓库拉下来跑通一个任务，确认定时触发和日志都正常;然后把通知配上，这样任务半夜挂了你早上能收到消息，而不是等某个签到断了好几天才发现。等熟悉了面板逻辑，再考虑套上 HTTPS 反代把它变成一个能随时随地访问的私人任务中心。
+
+# 青龙面板使用文档
+
+### 介绍
+官网地址：https://qinglong.online/
+开源地址：https://github.com/whyour/qinglong
+使用文档：https://qinglong.online/guide/introduction
+
+
+
+### Docker 部署
+```bash
+# curl -sSL get.docker.com | sh
+docker run -dit \
+  -v $PWD/ql/data:/ql/data \
+  # 冒号后面的 5700 为默认端口，如果设置了 QlPort, 需要跟 QlPort 保持一致
+  -p 5700:5700 \
+  # 部署路径非必须，比如 /test
+  -e QlBaseUrl="/" \
+  # 部署端口非必须，当使用 host 模式时，可以设置服务启动后的端口，默认 5700
+  -e QlPort="5700" \
+  --name qinglong \
+  --hostname qinglong \
+  --restart unless-stopped \
+  whyour/qinglong:latest
+```
+
+
+### 青龙面板数据备份和恢复
+#### 手动备份和恢复
+1. 停止容器： 为了保证数据一致性，先停止青龙容器：docker stop ql (ql为你的容器名)。
+2. 打包数据： 将宿主机的映射目录（假设为 /root/ql/data）打包
+```bash
+tar -czvf ql_data_backup.tar.gz /root/ql/data
+```
+3. 异地保存： 将生成的 ql_data_backup.tar.gz 文件下载并保存到安全位置。 
+4. 部署新容器： 按照正常流程创建新的青龙容器，确保映射了同样的 data 目录。
+5. 停止新容器： docker stop ql
+6. 覆盖数据： 解压备份文件到新环境的 data 目录
+```bash
+tar -xzvf ql_data_backup.tar.gz -C /path/to/new/data
+```
+7. 重启容器： docker start ql
+手机端特别说明： 若使用 ZeroTermux，可利用“备份/恢复”功能，将备份包放到指定目录后，在侧滑菜单中选择恢复。 
+
+#### 青龙脚本备份青龙数据
+ [AKA-Cigma/qinglong-backup: 将青龙的基本配置文件及脚本备份至阿里网盘&阿里网盘自动签到](https://github.com/AKA-Cigma/qinglong-backup) 
+
+
+
+### 重制密码
+青龙v2.18.0版本不再使用 auth.json 存储: https://github.com/RayWangQvQ/BiliBiliToolPro/issues/824
+
+Docker 青龙面板（v2.18.0及以上版本）不再使用 auth.json 存储登录凭证，而是改用数据库管理。若找不到该文件是正常的。若因插件（如 BiliBiliTool）报错提示找不到，请更新插件或检查插件是否已兼容新版青龙的持久化存储方式。
+版本原因：青龙 v2.18.0 之后已弃用旧的 auth.json 配置方式。
+处理方法：如果是使用旧版脚本提示此错误，请升级相关脚本或插件，使其适应新的环境变量或数据库存储方式。
+持久化：新版本登录状态自动持久化，无需手动操作 auth.json。
+
+如果您的目的是重置登录密码，旧版是删除 auth.json，新版则需要进入 Docker 容器执行命令：ql resetlet。
+
+#### 新版本重制密码（v2.18.0及之后）
+```bash
+# 更新到最新版本
+ql update 
+# 清空密码错误限制时间
+ql resetlet
+ql resetname <name>
+ql resetpwd <password>
+```
+
+#### 旧版本重制密码（v2.18.0之前）
+auth.json 文件中记录着 username 和 password 内容
+```bash
+cat ql/data/config/auth.json
+```
+
+
+#### 重置宝塔面板密码
+```bash
+ cd /www/server/panel && python tools.py panel newpasswd
+
+ rm -f /www/server/panel/data/*.login
+```
+
+### Docker容器命令
+```bash
+# 查看容器列表
+docker ps -a
+# 完成信息容器列表
+docker ps -a --no-trunc
+# 查看容器命令详情
+docker inspect <imageId>
+
+docker run <imageId>
+docker stop <imageId>
+docker restart <imageId>
+docker logs -f <ID>
+docker rm <ID
+
+# 进入容器
+docker exec -it <imageId> /bin/bash
+
+# 外部执行容器内部命令
+docker exec -it <imageId> ql resetlet
+```
