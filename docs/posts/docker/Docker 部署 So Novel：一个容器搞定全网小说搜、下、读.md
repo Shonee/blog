@@ -1,5 +1,5 @@
 ---
-title: Docker 在 NAS 上搭 So Novel：一个容器搞定全网小说搜、下、读
+title: Docker 部署 So Novel：一个容器搞定全网小说搜、下、读
 date: 2026-07-18
 category: docker
 tags:
