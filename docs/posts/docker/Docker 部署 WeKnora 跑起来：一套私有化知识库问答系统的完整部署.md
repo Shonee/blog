@@ -1,5 +1,5 @@
 ---
-title: Docker 把腾讯 WeKnora 跑起来：一套私有化知识库问答系统的完整部署
+title: Docker 部署 WeKnora 跑起来：一套私有化知识库问答系统的完整部署
 date: 2026-07-18
 category: docker
 tags:
